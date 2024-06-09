@@ -6,6 +6,7 @@ dotenv.config();
 
 import { connectDB } from "./db/postgresConnection.mjs";
 
+import mainRouter from './routes/mainRouter.mjs'
 const app = express();
 
 const startServer = async () => {
@@ -20,7 +21,7 @@ const startServer = async () => {
 
     // api routes
 
-    // app.use('/api', mainRouter);
+    app.use('/api', mainRouter);
 
     // configure port 
     const port = process.env.PORT;
