@@ -42,7 +42,7 @@ const userController = {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { login, passwords } = req.body;
+      const { login, password } = req.body;
 
       //Getting user from given email or username
       const user = await userModel.login(login);
@@ -72,7 +72,41 @@ const userController = {
         expiresIn: "2h",
       });
 
-      res.status(200).json({message: "logged in successfully", token});
+      res.status(200).json({ message: "logged in successfully", token });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getUserById: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const user = await userModel.getUserById(id);
+
+      if (!user) {
+        res.status(400).json({ message: "User not found" });
+        return;
+      }
+
+      delete user.password;
+
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  searchUsername: async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { search } = req.query;
+      const usernames = await userModel.searchUsername(search);
+
+      return res.status(200).json(username);
     } catch (error) {
       next(error);
     }

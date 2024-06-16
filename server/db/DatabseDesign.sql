@@ -40,12 +40,12 @@ CREATE TABLE staff (
 -- Table to store information about appointments
 CREATE TABLE appointments (
     id SERIAL PRIMARY KEY,
-    animal_id INT NOT NULL,
-    staff_id INT NOT NULL,
-    appointment_date TIMESTAMP NOT NULL,
-    status APPOINTMENT_STATUS NOT NULL DEFAULT 'scheduled',
-    CONSTRAINT fk_animals FOREIGN KEY(animal_id) REFERENCES animals(id),
-    CONSTRAINT fk_staff FOREIGN KEY(staff_id) REFERENCES staff(id)
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    -- appointment_date TIMESTAMP NOT NULL,
+    status APPOINTMENT_STATUS NOT NULL DEFAULT 'scheduled'
+    -- CONSTRAINT fk_animals FOREIGN KEY(animal_id) REFERENCES animals(id),
+    -- CONSTRAINT fk_staff FOREIGN KEY(staff_id) REFERENCES staff(id)
 );
 
 -- Table to store information about treatments
@@ -56,3 +56,23 @@ CREATE TABLE treatments (
     status TREATMENT_STATUS NOT NULL DEFAULT 'pending',
     CONSTRAINT fk_appointments FOREIGN KEY(appointment_id) REFERENCES appointments(id)
 );
+
+-- update  2024-06-16
+BEGIN;
+
+-- Step 1: Remove Foreign Key Constraints
+ALTER TABLE appointments DROP CONSTRAINT fk_animals;
+ALTER TABLE appointments DROP CONSTRAINT fk_staff;
+
+-- Step 2: Add New Columns
+ALTER TABLE appointments ADD COLUMN name VARCHAR(255) NOT NULL;
+ALTER TABLE appointments ADD COLUMN description TEXT NOT NULL;
+
+-- Step 3: Drop Existing Columns
+ALTER TABLE appointments DROP COLUMN animal_id;
+ALTER TABLE appointments DROP COLUMN staff_id;
+
+ALTER TABLE appointments
+DROP COLUMN appointment_date;
+
+COMMIT;

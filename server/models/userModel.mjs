@@ -28,7 +28,7 @@ const userModel = {
   },
 
   getUserByUsername: async(username) => {
-    const result = await pool.query('SELECT * FROM users WHERE username = $1' [username]);
+    const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
 
     return result.rows[0];
   },
