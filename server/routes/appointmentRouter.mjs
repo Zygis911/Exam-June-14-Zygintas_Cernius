@@ -10,5 +10,6 @@ dotenv.config();
 const router = express.Router();
 
 router.post('/', [AuthMiddleware, createAppointmentValidationSchema], appointmentController.createAppointment);
+router.get('/:id', AuthMiddleware, appointmentController.getAppointmentById);
 
 export default router;
